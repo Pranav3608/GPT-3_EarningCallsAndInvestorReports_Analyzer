@@ -18,15 +18,15 @@ st.text('This is a web app to allow Summarization of Transcripts')
 upload_file = st.file_uploader('Upload your transcript file')
 
 # OpenAI setup
-openai.api_type = "azure"
-openai.api_base = "https://text-summarizer-poc.openai.azure.com/"
-openai.api_version = "2022-12-01"
-openai.api_key = '3316a5009348459a891e07fd907e7735'
+openai.api_type = "AZURE"
+openai.api_base = "YOUR_OPENAI_AZURE_ENDPOINT"
+openai.api_version = "OPENAI_API_VERSION"
+openai.api_key = 'YOUR_OPENAI_API_KEY'
 
 # Azure Storage setup
-storage_connection_string = "DefaultEndpointsProtocol=https;AccountName=transcriptfiles;AccountKey=lb1XCYk4wGZfHiiCewvi+jqbXz5fsB72/+/9QGX3g/UkeKohnx/Z8BvFZc+I4Wm8cphzMkkDYXgr+ASt1oNqhg==;EndpointSuffix=core.windows.net"
-container_name = "transcriptfile"
-output_container_name = "output-summary-files"  # New container for output summary
+storage_connection_string = "YOUR_AZURE_STORAGE_CONNECTION_STRING"
+container_name = "YOUR_AZURE_CONTAINER_NAME"
+output_container_name = "YOUR_AZURE_OUTPUT_CONTAINER_NAME"  # New container for output summary
 blob_service_client = BlobServiceClient.from_connection_string(storage_connection_string)
 
 # Create the output container if it doesn't exist
@@ -108,7 +108,7 @@ if upload_file is not None:
         prompt = f"Generate a concise summary of the following text:\n\n{sentences}\n\n"
 
         response = openai.Completion.create(
-            engine="text-summary-poc",
+            engine="YOUR_OPENAI_ENGINE_NAME",
             prompt=prompt,
             temperature=0.2,
             max_tokens=100,
