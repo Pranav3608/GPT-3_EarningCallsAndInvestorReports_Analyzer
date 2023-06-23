@@ -6,6 +6,7 @@ import uuid
 from azure.storage.blob import BlobServiceClient
 import re
 import nltk
+nltk.download('punkt')
 from nltk.tokenize import sent_tokenize
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
