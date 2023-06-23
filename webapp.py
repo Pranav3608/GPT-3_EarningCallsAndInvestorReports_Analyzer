@@ -18,15 +18,15 @@ st.text('This is a web app to allow Summarization of Transcripts')
 upload_file = st.file_uploader('Upload your transcript file')
 
 # OpenAI setup
-openai.api_type = "AZURE"
-openai.api_base = "YOUR_OPENAI_AZURE_ENDPOINT"
-openai.api_version = "OPENAI_API_VERSION"
-openai.api_key = 'YOUR_OPENAI_API_KEY'
+openai.api_type = "azure"
+openai.api_base = "https://text-summarizer-poc.openai.azure.com/"
+openai.api_version = "2022-12-01"
+openai.api_key = '3316a5009348459a891e07fd907e7735'
 
 # Azure Storage setup
-storage_connection_string = "YOUR_AZURE_STORAGE_CONNECTION_STRING"
-container_name = "YOUR_AZURE_CONTAINER_NAME"
-output_container_name = "YOUR_AZURE_OUTPUT_CONTAINER_NAME"  # New container for output summary
+storage_connection_string = "DefaultEndpointsProtocol=https;AccountName=transcriptfiles;AccountKey=lb1XCYk4wGZfHiiCewvi+jqbXz5fsB72/+/9QGX3g/UkeKohnx/Z8BvFZc+I4Wm8cphzMkkDYXgr+ASt1oNqhg==;EndpointSuffix=core.windows.net"
+container_name = "transcriptfile"
+output_container_name = "output-summary-files"  # New container for output summary
 blob_service_client = BlobServiceClient.from_connection_string(storage_connection_string)
 
 # Create the output container if it doesn't exist
@@ -56,8 +56,8 @@ def generate_key_points(text):
     ranked_sentences = sorted(((scores[i], sentence) for i, sentence in enumerate(sentences)), reverse=True)
 
     # Select top N key points
-    num_key_points = min(5, len(ranked_sentences))  # Adjust the number of key points as needed
-    key_points = [ranked_sentence[1] for ranked_sentence in ranked_sentences[:num_key_points]]
+    num_key_points = 10  # Specify the desired number of key points here
+    key_points = [ranked_sentence[1] for _, ranked_sentence in enumerate(ranked_sentences) if _ < num_key_points]
 
     return key_points
 
@@ -108,7 +108,7 @@ if upload_file is not None:
         prompt = f"Generate a concise summary of the following text:\n\n{sentences}\n\n"
 
         response = openai.Completion.create(
-            engine="YOUR_OPENAI_ENGINE_NAME",
+            engine="text-summary-poc",
             prompt=prompt,
             temperature=0.2,
             max_tokens=100,
@@ -120,9 +120,6 @@ if upload_file is not None:
         summary_responses.append(response_text)
 
     full_summary = " ".join(summary_responses)
-
-    # Clear the status message
-    status_placeholder.empty()
 
     # Generate key points from the summary
     key_points = generate_key_points(full_summary)
@@ -139,8 +136,9 @@ if upload_file is not None:
 
     # Display the key points
     st.subheader('Key Points:')
-    for point in key_points:
-        st.markdown(f"- {point}")
+    key_points_text = "\n".join([f"<li>{point}</li>" for point in key_points])
+    key_points_html = f"<ul style='font-family: Arial, sans-serif;'>{key_points_text}</ul>"
+    st.markdown(key_points_html, unsafe_allow_html=True)
 
     # Add spacing between key points and word count
     st.markdown("<br>", unsafe_allow_html=True)
@@ -161,7 +159,8 @@ if upload_file is not None:
 
     # User input for the download file name
     input_file_name_without_extension = file_name.split(".")[0]
-    download_file_name = st.text_input("Enter file name for download", value=f"{input_file_name_without_extension}_summary.txt")
+    download_file_name = st.text_input("Enter file name for download",
+                                       value=f"{input_file_name_without_extension}_summary.txt")
 
     if st.button("Download Summary"):
         if download_file_name == "":
@@ -176,7 +175,12 @@ if upload_file is not None:
             # Provide a download link for the summary
             download_link = get_download_link(full_summary, download_file_name)
             st.markdown(download_link, unsafe_allow_html=True)
+            st.success("Summary downloaded successfully.")
 
-            # Upload the summary as a blob in the output container
-            output_blob_client = blob_service_client.get_blob_client(container=output_container_name, blob=download_file_name)
+            # Upload the summary to Azure Blob Storage
+            output_blob_client = blob_service_client.get_blob_client(container=output_container_name,
+                                                                    blob=download_file_name)
             output_blob_client.upload_blob(full_summary)
+
+    # Remove the uploaded file from Azure Blob Storage
+    uploaded_blob_client.delete_blob()
