@@ -1,8 +1,6 @@
 openai
 streamlit
 numpy
-base64
-uuid 
 azure-storage-blob
 nltk
 networkx
