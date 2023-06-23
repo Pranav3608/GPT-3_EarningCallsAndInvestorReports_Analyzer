@@ -5,3 +5,4 @@ azure-storage-blob
 nltk
 networkx
 sklearn
+punkt
