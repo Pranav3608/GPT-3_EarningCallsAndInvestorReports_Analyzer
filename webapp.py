@@ -122,6 +122,11 @@ if upload_file is not None:
 
     full_summary = " ".join(summary_responses)
 
+    # Check if the last sentence is incomplete and truncate if necessary
+    last_sentence = full_summary.split('.')[-1].strip()
+    if last_sentence and last_sentence[-1] != '.':
+        full_summary = full_summary[:-(len(last_sentence))].strip()
+
     # Generate key points from the summary
     key_points = generate_key_points(full_summary)
 
