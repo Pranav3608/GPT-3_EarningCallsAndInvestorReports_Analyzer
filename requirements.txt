@@ -4,5 +4,5 @@ numpy
 azure-storage-blob
 nltk
 networkx
-sklearn
+scikit-learn
 punkt
