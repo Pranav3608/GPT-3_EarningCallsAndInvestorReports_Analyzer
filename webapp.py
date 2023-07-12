@@ -20,12 +20,12 @@ upload_file = st.file_uploader('Upload your transcript file')
 
 # OpenAI setup
 openai.api_type = "azure"
-openai.api_base = "https://text-summarizer-poc.openai.azure.com/"
+openai.api_base = "Azure_API_endpoint"
 openai.api_version = "2022-12-01"
-openai.api_key = '3316a5009348459a891e07fd907e7735'
+openai.api_key = 'Your_OpenAI_API_Key'
 
 # Azure Storage setup
-storage_connection_string = "DefaultEndpointsProtocol=https;AccountName=transcriptfiles;AccountKey=lb1XCYk4wGZfHiiCewvi+jqbXz5fsB72/+/9QGX3g/UkeKohnx/Z8BvFZc+I4Wm8cphzMkkDYXgr+ASt1oNqhg==;EndpointSuffix=core.windows.net"
+storage_connection_string = "Your_Azure_Storageconnection_String"
 container_name = "transcriptfile"
 output_container_name = "output-summary-files"  # New container for output summary
 blob_service_client = BlobServiceClient.from_connection_string(storage_connection_string)
