@@ -1,7 +1,7 @@
 # OpenAI_TextSummarizer_WebApp
 **OpenAI Transcript Summariser**
 
-This is a web app that allows you to summarize transcripts using OpenAI's text summarization capabilities.
+Streamlit-based web app using OpenAI's GPT-3 model to summarize financial transcripts, extract key points and discover actionable insights. Utilizes ML, NLP and Genrative AI techniques for efficient content analysis. The application also utilises Micorsoft Azure blob storage for efficient data storage and retrieval. 
 
 **Installation**
 
