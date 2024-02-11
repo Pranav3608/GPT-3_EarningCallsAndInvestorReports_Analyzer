@@ -1,6 +1,4 @@
-# OpenAI_TextSummarizer_WebApp
-**OpenAI Transcript Summariser**
-
+# OpenAI-GPT3_InvestorReports_Analyzer
 Streamlit-based web app using OpenAI's GPT-3 model to summarize financial transcripts, extract key points and discover actionable insights. Utilizes ML, NLP and Genrative AI techniques for efficient content analysis. The application also utilises Micorsoft Azure blob storage for efficient data storage and retrieval. 
 
 **Installation**
