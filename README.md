@@ -15,11 +15,7 @@ To run this project locally, you need to install the following dependencies:
 - **scikit-learn**
 - **networkx**
 
-You can install these dependencies by running the following command:
-
-bashCopy code
-
-pip install streamlit openai numpy base64 uuid azure-storage-blob nltk scikit-learn networkx 
+All of these dependencies have been mentioned in the requirements file in the repository.
 
 **Usage**
 
